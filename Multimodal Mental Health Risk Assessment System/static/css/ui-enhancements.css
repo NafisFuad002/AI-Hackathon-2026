@@ -1,0 +1,148 @@
+/* =====================================================================
+   ui-enhancements.css
+   --------------------
+   এই ফাইলটা নতুন যোগ করা হলো। আসল "style.css" ফাইলটা আমার কাছে দেওয়া
+   হয়নি, তাই তার ভেতরের exact রং/স্টাইল না জেনে সরাসরি সেটা এডিট করা
+   হয়নি - বরং এই আলাদা ফাইলে শুধু "hover" (মাউস নেওয়ার) ইফেক্ট আর
+   "processing" (লোডিং) অবস্থার স্টাইল যোগ করা হলো, এবং প্রতিটা HTML
+   পেজের <head> এ style.css এর ঠিক পরেই এই ফাইলটা লিংক করা হয়েছে।
+
+   কীভাবে কাজ করে:
+   - filter: brightness(...) ব্যবহার করা হয়েছে, exact রং না জেনেও যেকোনো
+     ব্যাকগ্রাউন্ড রং কে হালকা গাঢ়/হালকা করে দেয় hover করলে - তাই
+     style.css এ বাটনের যে রংই থাকুক না কেন, এটা কাজ করবে।
+   - transition দিয়ে পরিবর্তনটা smooth (ধীরে ধীরে) দেখানো হচ্ছে, হঠাৎ
+     বদলে যাওয়ার বদলে।
+   ===================================================================== */
+
+/* ---------- সব ধরনের প্রধান বাটনে hover ইফেক্ট ---------- */
+.btn-primary,
+.btn-secondary,
+.btn-submit-panel,
+.new-assessment-btn,
+#search-btn,
+#existing-search-btn,
+#admin-student-search-btn,
+#login-btn,
+#save-assessment-btn,
+#create-professional-btn,
+#admin-login-btn,
+.choice-card,
+.admin-delete-btn {
+    transition: filter 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+    cursor: pointer;
+}
+
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-submit-panel:hover,
+.new-assessment-btn:hover,
+#search-btn:hover,
+#existing-search-btn:hover,
+#admin-student-search-btn:hover,
+#login-btn:hover,
+#save-assessment-btn:hover,
+#create-professional-btn:hover,
+#admin-login-btn:hover,
+.choice-card:hover,
+.admin-delete-btn:hover {
+    filter: brightness(0.92);      /* মাউস নিলে একটু গাঢ় হয়ে যাবে, বোঝা যাবে হোভার হচ্ছে */
+    transform: translateY(-1px);   /* সামান্য উপরে উঠে আসবে - প্রেস করার মতো ফিল দেয় */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+/* ক্লিক করার মুহূর্তে (active) একটু চেপে বসার মতো ইফেক্ট */
+.btn-primary:active,
+.btn-secondary:active,
+.btn-submit-panel:active,
+.new-assessment-btn:active,
+#save-assessment-btn:active {
+    transform: translateY(0px);
+    filter: brightness(0.85);
+}
+
+/* ---------- "Processing..." অবস্থা ---------- */
+/* JS থেকে fetch() কল চলাকালীন বাটনে এই ক্লাসটা যোগ করা হয়, রেসপন্স
+   আসার পর সরিয়ে ফেলা হয় (দেখো assessment.js, login.js ইত্যাদি) */
+.btn-processing {
+    opacity: 0.65;
+    cursor: not-allowed !important;
+    pointer-events: none;   /* প্রসেসিং চলাকালীন বারবার ক্লিক করা আটকানোর জন্য */
+    filter: none !important;
+    transform: none !important;
+}
+
+/* ---------- টেবিলের ক্লিকযোগ্য row গুলোতেও হালকা hover ইফেক্ট ---------- */
+.student-table tbody tr {
+    transition: background-color 0.15s ease;
+    cursor: pointer;
+}
+.student-table tbody tr:hover {
+    background-color: rgba(79, 70, 229, 0.07);
+}
+
+/* ---------- Admin panel এর ডিলিট বাটন - একটু লাল/সতর্কতামূলক রং ---------- */
+.admin-delete-btn {
+    background-color: #ef4444;
+    color: #ffffff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+}
+.admin-delete-btn:hover {
+    filter: brightness(0.9);
+}
+
+/* 🆕 "All Students" টেবিলের "View Assessments" বাটন - Delete বাটনের
+   পাশে থাকবে, তাই আলাদা করে চেনার জন্য নিউট্রাল/ইন্ডিগো রং */
+.view-assessments-btn {
+    background-color: #4f46e5;
+    color: #ffffff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-right: 6px;
+    cursor: pointer;
+    transition: filter 0.15s ease;
+}
+.view-assessments-btn:hover {
+    filter: brightness(0.9);
+}
+
+/* =====================================================================
+   🆕 student_profile.html এর Assessment History টেবিলে "View Details"
+   বাটনের জন্য। আগে পুরো row-ই ক্লিকযোগ্য ছিল (onclick দিয়ে), কিন্তু এখন
+   row-এ ৩টা মডেলের ফলাফলও দেখানো হচ্ছে বলে শুধু একটা নির্দিষ্ট বাটন/লিংক
+   রাখা হলো, যাতে বোঝা যায় ঠিক কোথায় ক্লিক করলে বিস্তারিত দেখা যাবে।
+   ===================================================================== */
+.view-details-link {
+    color: #4f46e5;
+    font-weight: 600;
+    font-size: 13px;
+    white-space: nowrap;
+}
+.view-details-link:hover {
+    text-decoration: underline;
+}
+
+/* Assessment History টেবিলে যেহেতু এখন পুরো row ক্লিকযোগ্য না (শুধু
+   ডান পাশের বাটনটা), তাই এই একটা টেবিলের জন্য hover cursor আর
+   background-highlight বন্ধ রাখা হলো, যাতে ইউজার সারা row কে ক্লিকযোগ্য
+   ভেবে বিভ্রান্ত না হয় (.student-table এর ডিফল্ট hover ইফেক্ট এখানে override করা হলো) */
+#assessment-history-table tbody tr {
+    cursor: default;
+}
+#assessment-history-table tbody tr:hover {
+    background-color: transparent;
+}
+
+/* 🆕 Admin panel এর "Manage Student Assessments" টেবিলেও একই কারণে
+   (পুরো row ক্লিকযোগ্য না, শুধু Delete বাটন) row hover বন্ধ রাখা হলো */
+#admin-assessments-table tbody tr {
+    cursor: default;
+}
+#admin-assessments-table tbody tr:hover {
+    background-color: transparent;
+}
