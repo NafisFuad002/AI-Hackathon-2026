@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard | Mental Health Support Center</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/ui-enhancements.css">
+</head>
+<body>
+
+{% include "_navbar.html" %}
+
+<div class="page-container">
+
+    <div class="welcome-section">
+        <h2>Welcome, {{ professional.name }}</h2>
+        <p>Manage and review student mental health assessments</p>
+    </div>
+
+    <!-- =====================================================================
+         🆕 STATS বক্স (৪টা, পাশাপাশি) - main.py এর dashboard_page() রুট
+         থেকে ৪টা সংখ্যা (context variable) হিসেবে পাঠানো হয়েছে, এখানে
+         Jinja２ টেমপ্লেট সিনট্যাক্স {{ variable_name }} দিয়ে সেগুলো বসানো
+         হচ্ছে। CSS (.stats-grid / .stat-box) style.css ফাইলে যোগ করা আছে।
+         ===================================================================== -->
+    <div class="stats-grid">
+
+        <!-- বক্স ১: মোট কতজন Student assessment নিয়েছে (draft বাদে) -->
+        <div class="stat-box">
+            <div class="stat-icon">🧑‍🎓</div>
+            <div class="stat-number">{{ total_students_assessed }}</div>
+            <div class="stat-label">Total Students Assessed</div>
+        </div>
+
+        <!-- বক্স ২: মোট কতজন Professional (Doctor) সিস্টেমে আছে -->
+        <div class="stat-box">
+            <div class="stat-icon">🩺</div>
+            <div class="stat-number">{{ total_professionals }}</div>
+            <div class="stat-label">Total Professionals</div>
+        </div>
+
+        <!-- বক্স ৩: এখন কতজন Student "Risk" এ আছে (প্রতিটা Student এর
+             সবচেয়ে সাম্প্রতিক assessment অনুযায়ী - বিস্তারিত নিয়ম
+             main.py এর dashboard_page() ফাংশনের কমেন্টে লেখা আছে)।
+             এই বক্সটা আলাদা রং (stat-box-risk ক্লাস) দিয়ে চেনানো হচ্ছে,
+             যাতে সাথে সাথে চোখে পড়ে। -->
+        <div class="stat-box stat-box-risk">
+            <div class="stat-icon">⚠️</div>
+            <div class="stat-number">{{ total_students_at_risk }}</div>
+            <div class="stat-label">Students at Risk</div>
+        </div>
+
+        <!-- বক্স ৪: সব Student মিলিয়ে মোট কতগুলো Assessment "Save/Complete" হয়েছে -->
+        <div class="stat-box">
+            <div class="stat-icon">✅</div>
+            <div class="stat-number">{{ total_assessments_completed }}</div>
+            <div class="stat-label">Assessments Completed</div>
+        </div>
+
+    </div>
+
+    <!-- 🔍 Student Search -->
+    <div class="search-card">
+        <h3>🔍 Search Student</h3>
+        <div class="search-box-row">
+            <input type="text" id="search-student-id" placeholder="Enter Student ID...">
+            <button id="search-btn">Search</button>
+        </div>
+        <div class="error-text hidden" id="search-error">Not found!</div>
+    </div>
+
+    <!-- ➕ New Assessment -->
+    <a href="/new-assessment" class="new-assessment-btn">+ New Assessment</a>
+
+</div>
+
+<script src="/static/js/dashboard.js"></script>
+
+
+{% include "_footer.html" %}
+
+</body>
+</html>

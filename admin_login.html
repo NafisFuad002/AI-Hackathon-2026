@@ -1,0 +1,39 @@
+<!--
+    admin_login.html  (🆕 নতুন ফাইল)
+    -----------------------------------
+    Admin panel এর লগইন পেজ। এটা professionals দের সাধারণ login.html
+    থেকে সম্পূর্ণ আলাদা - এখানে id/password হার্ডকোডেড: admin / admin
+    (backend এর /api/admin/login এ চেক হয়, database এর সাথে সম্পর্কযুক্ত না)।
+-->
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Login | Mental Health Support Center</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/ui-enhancements.css">
+</head>
+<body>
+<div class="login-wrapper">
+    <div class="login-card">
+        <div class="logo">🛠️ Admin Panel</div>
+        <div class="tagline">Mental Health Support Center — Admin Access</div>
+
+        <div class="form-group">
+            <label>Admin ID</label>
+            <input type="text" id="admin-username" placeholder="admin">
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="admin-password" placeholder="••••••••">
+        </div>
+
+        <button class="btn-primary" id="admin-login-btn">Login</button>
+
+        <div class="error-text hidden" id="admin-login-error"></div>
+    </div>
+</div>
+
+<script src="/static/js/admin.js"></script>
+</body>
+</html>

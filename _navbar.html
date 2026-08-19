@@ -1,0 +1,18 @@
+<!--
+    _navbar.html
+    -------------
+    এটা একটা "partial" টেমপ্লেট - বার বার একই navbar কোড না লিখে
+    Jinja２ এর include statement দিয়ে প্রতিটা পেজে এটা বসিয়ে দেওয়া হয়।
+    active_page ভ্যারিয়েবল দিয়ে বোঝানো হয় বর্তমানে কোন পেজে আছি,
+    যাতে সেই লিংকটা "active" স্টাইল পায়।
+-->
+<div class="navbar">
+    <div class="logo">🧠 Mental Health Support Center</div>
+    <div class="nav-links">
+        <a href="/dashboard" class="{{ 'active' if active_page == 'dashboard' else '' }}">Dashboard</a>
+        <a href="/students" class="{{ 'active' if active_page == 'students' else '' }}">Students</a>
+        <!-- <a href="#" class="{{ 'active' if active_page == 'reports' else '' }}">Reports</a> -->
+        <a href="/profile" class="{{ 'active' if active_page == 'profile' else '' }}">Profile</a>
+        <a href="/logout" class="logout-link">Logout</a>
+    </div>
+</div>
