@@ -35,6 +35,10 @@ import json
 import joblib   # ⚠️ darwin_alzheimer_model.pkl আর darwin_label_encoder.pkl
                 # এই দুইটা joblib দিয়ে সেভ করা - সাধারণ pickle.load() দিয়ে
                 # এগুলো খোলা যায় না, তাই joblib.load() ব্যবহার করা হচ্ছে
+import urllib.request  # 🆕 বড় (25MB+) মডেল ফাইল GitHub-এর সাধারণ website
+                        # upload দিয়ে repo-তে রাখা যায় না (25MB limit), তাই
+                        # সেগুলো GitHub "Release" এ আলাদাভাবে আপলোড করে সেখান
+                        # থেকে সার্ভার চালু হওয়ার সময় ডাউনলোড করে আনা হয়
 import numpy as np
 import torch
 
@@ -52,6 +56,22 @@ VOICE_MODEL_PATH = os.path.join(MODELS_DIR, "voice_model.pth")   # ⚠️ .pth, 
 HANDWRITING_MODEL_PATH = os.path.join(MODELS_DIR, "darwin_alzheimer_model.pkl")           # আসল classifier (sklearn Pipeline)
 HANDWRITING_LABEL_ENCODER_PATH = os.path.join(MODELS_DIR, "darwin_label_encoder.pkl")     # 0/1 -> 'H'/'P' ডিকোড করার জন্য
 HANDWRITING_FEATURE_NAMES_PATH = os.path.join(MODELS_DIR, "darwin_feature_names.json")    # ৪৫০টা feature এর নাম + ক্রম
+
+# =====================================================================
+# 🆕 QUESTIONNAIRE মডেল (suicide_risk_model.pkl) সাইজে বড় (৩৫+ MB) বলে
+# GitHub রিপোর ভেতরে সরাসরি রাখা যায়নি (সাধারণ upload এ ২৫MB limit) -
+# তাই এটা GitHub এর "Release" ফিচার দিয়ে আলাদাভাবে আপলোড করে রাখা হয়েছে,
+# আর নিচের লিংক থেকে সেটা ডাউনলোড করে আনা হয়।
+#
+# এই লিংকটা একটা environment variable (QUESTIONNAIRE_MODEL_URL) থেকেও
+# আসতে পারে - Render এ চাইলে সেটা সেট করে ভবিষ্যতে মডেল আপডেট করা যাবে,
+# কোড না বদলিয়েই। এনভায়রনমেন্ট ভ্যারিয়েবল সেট করা না থাকলে নিচের
+# ডিফল্ট লিংকটাই ব্যবহার হবে।
+# =====================================================================
+QUESTIONNAIRE_MODEL_DOWNLOAD_URL = os.environ.get(
+    "QUESTIONNAIRE_MODEL_URL",
+    "https://github.com/NafisFuad002/AI-Hackathon-2026/releases/download/suicide_risk_model/suicide_risk_model.pkl",
+)
 
 
 # =====================================================================
@@ -85,6 +105,33 @@ FEATURE_ORDER = [
     "depression_level", "anxiety_level", "mental_support",
     "self_harm_history",
 ]
+
+
+def _ensure_model_downloaded(path, url):
+    """
+    🆕 দেওয়া path এ ফাইলটা আগে থেকে না থাকলে, দেওয়া url থেকে সেটা
+    ডাউনলোড করে ওই path এ সেভ করে রাখে (একবারই হবে - পরের বার সার্ভার
+    রিস্টার্ট হলে ফাইল আগে থেকে থাকায় আর ডাউনলোড হবে না)।
+
+    এটা মূলত বড় সাইজের (২৫MB+) মডেল ফাইলের জন্য, যেগুলো সরাসরি GitHub
+    রিপোতে রাখা যায়নি (GitHub Release এ আলাদাভাবে আপলোড করা আছে)।
+
+    url ফাঁকা/None হলে বা ডাউনলোড কোনো কারণে ব্যর্থ হলে চুপচাপ ফিরে আসে -
+    তখন _load_pickle_model() ফাইল খুঁজে না পেয়ে None রিটার্ন করবে এবং
+    mock prediction ব্যবহার হবে (পুরো অ্যাপ ক্র্যাশ করবে না)।
+    """
+    if os.path.exists(path) or not url:
+        return
+
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    try:
+        print(f"[ml_models.py] '{os.path.basename(path)}' পাওয়া যায়নি - ডাউনলোড করা হচ্ছে: {url}")
+        urllib.request.urlretrieve(url, path)
+        print(f"[ml_models.py] ডাউনলোড সম্পন্ন -> {path}")
+    except Exception as e:
+        # ডাউনলোড ব্যর্থ হলেও সার্ভার চালু রাখা হচ্ছে (mock prediction দিয়ে
+        # কাজ চালানো যাবে) - শুধু error টা log এ দেখানো হচ্ছে যাতে বোঝা যায়
+        print(f"[ml_models.py] ⚠️ মডেল ডাউনলোড ব্যর্থ হয়েছে ({path}): {e}")
 
 
 def _load_pickle_model(path):
@@ -143,6 +190,12 @@ def _load_voice_model(path):
 
 # অ্যাপ চালু হওয়ার সময় একবারই মডেলগুলো লোড করে মেমোরিতে রাখা হচ্ছে
 # (প্রতিটা request এ বারবার লোড করলে সার্ভার স্লো হয়ে যাবে)
+
+# 🆕 questionnaire মডেল (suicide_risk_model.pkl) সাইজে বড় বলে GitHub
+# Release থেকে দরকার হলে প্রথমে ডাউনলোড করে নেওয়া হচ্ছে, তারপর লোড করা
+# হচ্ছে - অন্য দুইটা মডেল (voice/handwriting) ছোট, তাই সরাসরি রিপোতেই
+# আছে বলে ধরে নেওয়া হচ্ছে (আলাদা ডাউনলোড লাগছে না)
+_ensure_model_downloaded(QUESTIONNAIRE_MODEL_PATH, QUESTIONNAIRE_MODEL_DOWNLOAD_URL)
 _questionnaire_model = _load_pickle_model(QUESTIONNAIRE_MODEL_PATH)
 _voice_model = _load_voice_model(VOICE_MODEL_PATH)   # PyTorch মডেল - আলাদা loader
 
