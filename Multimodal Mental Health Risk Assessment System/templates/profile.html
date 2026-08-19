@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile | Mental Health Support Center</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/ui-enhancements.css">
+</head>
+<body>
+
+{% include "_navbar.html" %}
+
+<div class="page-container">
+    <div class="welcome-section">
+        <h2>My Profile</h2>
+    </div>
+
+    <!-- নোট: password, security question, security answer এখানে দেখানো হচ্ছে না
+         (main.py এর SQL query তেই এগুলো select করা হয়নি, নিরাপত্তার জন্য) -->
+    <div class="info-card">
+        <div class="info-grid">
+            <div class="info-item"><div class="label">Name</div><div class="value">{{ professional.name }}</div></div>
+            <div class="info-item"><div class="label">Email</div><div class="value">{{ professional.email }}</div></div>
+            <div class="info-item"><div class="label">Phone</div><div class="value">{{ professional.phone_number or "-" }}</div></div>
+            <!-- 🆕 Gender/NID/Blood Group - registration এর সময় (admin panel
+                 থেকে) নেওয়া তথ্য, এখন এখানেও দেখানো হচ্ছে -->
+            <div class="info-item"><div class="label">Gender</div><div class="value">{{ professional.gender or "-" }}</div></div>
+            <div class="info-item"><div class="label">NID</div><div class="value">{{ professional.nid or "-" }}</div></div>
+            <div class="info-item"><div class="label">Blood Group</div><div class="value">{{ professional.blood_group or "-" }}</div></div>
+            <div class="info-item"><div class="label">Member Since</div><div class="value">{{ professional.created_at }}</div></div>
+        </div>
+    </div>
+</div>
+
+
+{% include "_footer.html" %}
+
+
+</body>
+</html>

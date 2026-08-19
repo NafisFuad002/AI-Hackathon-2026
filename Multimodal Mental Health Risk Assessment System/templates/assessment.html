@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <title>Assessment | Mental Health Support Center</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/ui-enhancements.css">
+</head>
+<body>
+
+{% include "_navbar.html" %}
+
+<div class="page-container">
+    <div class="welcome-section">
+        <h2>Assessment for {{ assessment.student_name }}</h2>
+        <p>Assessment ID: #{{ assessment.assessment_id }} — One, two or all assessment(s) can be taken</p>
+    </div>
+
+    {% if assessment.is_finalized %}
+    <!-- =====================================================================
+         READ-ONLY VIEW: এই assessment টা আগেই "Save Assessment" বাটন
+         দিয়ে ফাইনাল/লক করা হয়ে গেছে। তাই এখানে কোনো ফর্ম/ইনপুট দেখানো
+         হচ্ছে না - শুধু ৩টা assessment এর ফলাফল একটা ছোট/সংক্ষিপ্ত
+         টেবিলে দেখানো হচ্ছে। এডিট করার কোনো উপায় এই পেজে নেই (backend
+         এও is_finalized চেক করে এডিট আটকে দেয়, তাই এটা শুধু UI-level
+         সুরক্ষা না, দুই দিক থেকেই সুরক্ষিত)।
+         ===================================================================== -->
+    <div class="info-card">
+        <h3>✅ Assessment (Saved)</h3>
+        <p style="color:#6b7280;font-size:13px;margin-top:4px;">
+            This assessment has been saved and finalized, so it cannot be edited anymore.
+        </p>
+
+        <table class="student-table" style="margin-top:16px;">
+            <thead>
+                <tr>
+                    <th>Assessment Type</th>
+                    <th>Result</th>
+                    <th>Confidence</th>
+                    <th>Risk Level</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- ---------- Questionnaire সারি ---------- -->
+                <tr>
+                    <td>📝 Questionnaire</td>
+                    {% if questionnaire_result and questionnaire_result.applicable %}
+                        <td>{{ questionnaire_result.model_output }}</td>
+                        <td>-</td>
+                        <td>-</td>
+                    {% else %}
+                        <td colspan="3" style="color:#9ca3af;">Didn't received</td>
+                    {% endif %}
+                </tr>
+                <!-- ---------- Voice সারি ---------- -->
+                <tr>
+                    <td>🎙️ Voice</td>
+                    {% if voice_result and voice_result.applicable %}
+                        <td>{{ voice_result.model_output }}</td>
+                        <td>{{ voice_result.confidence_percent ~ "%" if voice_result.confidence_percent is not none else "-" }}</td>
+                        <td>{{ voice_result.risk_level or "-" }}</td>
+                    {% else %}
+                        <td colspan="3" style="color:#9ca3af;">Didn't received</td>
+                    {% endif %}
+                </tr>
+                <!-- ---------- Handwriting সারি ---------- -->
+                <tr>
+                    <td>✍️ Handwriting</td>
+                    {% if handwriting_result and handwriting_result.applicable %}
+                        <td>{{ handwriting_result.model_output }}</td>
+                        <td>{{ handwriting_result.confidence_percent ~ "%" if handwriting_result.confidence_percent is not none else "-" }}</td>
+                        <td>{{ handwriting_result.risk_level or "-" }}</td>
+                    {% else %}
+                        <td colspan="3" style="color:#9ca3af;">Didn't received</td>
+                    {% endif %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+    <!-- =====================================================================
+         EDITABLE VIEW: এখনো Save/Finalize করা হয়নি, তাই আগের মতোই
+         ৩টা প্যানেলের ফর্ম দেখানো হচ্ছে, এবং সবার নিচে নতুন
+         "Save Assessment" বাটন যোগ করা হয়েছে।
+         ===================================================================== -->
+
+    <!-- assessment_id কে JS এ পাঠানোর জন্য একটা hidden input -->
+    <input type="hidden" id="assessment-id-value" value="{{ assessment.assessment_id }}">
+
+    <div class="assessment-columns">
+
+        <!-- ============= 1) QUESTIONNAIRE ASSESSMENT (বাম) ============= -->
+        <div class="assessment-panel">
+            <h4>📝 Questionnaire Assessment</h4>
+
+            <div class="form-group">
+                <label>Age</label>
+                <input type="number" id="q-age" placeholder="Age">
+            </div>
+
+            <div class="form-group">
+                <label>Gender</label>
+                <select id="q-gender">
+                    <option>Male</option><option>Female</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Stress Level</label>
+                <select id="q-stress_level">
+                    <option>Low</option><option>Moderate</option><option>High</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Academic Performance</label>
+                <select id="q-academic_performance">
+                    <option>Good</option><option>Poor</option><option>Average</option><option>Excellent</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Health Condition</label>
+                <select id="q-health_condition">
+                    <option>Normal</option><option>Fair</option><option>Abnormal</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Relationship Condition</label>
+                <select id="q-relationship_condition">
+                    <option>In a relationship</option><option>Single</option><option>Breakup</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Family Problem</label>
+                <select id="q-family_problem">
+                    <option>None</option><option>Parental conflict</option><option>Financial</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Depression Level</label>
+                <select id="q-depression_level">
+                    <option>Always</option><option>Often</option><option>Sometimes</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Anxiety Level</label>
+                <select id="q-anxiety_level">
+                    <option>Always</option><option>Often</option><option>Sometimes</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Mental Support</label>
+                <select id="q-mental_support">
+                    <option>Family</option><option>loneliness</option><option>Friends</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Self-harm History</label>
+                <select id="q-self_harm_history">
+                    <option>No</option><option>Yes</option>
+                </select>
+            </div>
+
+            <button class="btn-submit-panel" id="submit-questionnaire-btn">Submit & Predict</button>
+            <div id="questionnaire-result" class="result-badge hidden"></div>
+        </div>
+
+        <!-- ============= 2) VOICE ASSESSMENT (মাঝখানে) ============= -->
+        <!-- মডেল ৩টা আলাদা emotion-related response audio নেয় (paper অনুযায়ী):
+             positive, negative, neutral - এই ৩টাই আবশ্যক, ক্রমও ঠিক এমনই থাকা লাগবে -->
+        <div class="assessment-panel">
+            <h4>🎙️ Voice Assessment</h4>
+
+            <div class="form-group">
+                <label>Positive Response (একটা সুখের/আনন্দের স্মৃতি)</label>
+                <input type="file" id="voice-positive-input" accept="audio/*">
+            </div>
+
+            <div class="form-group">
+                <label>Negative Response (একটা কষ্টের/দুঃখের স্মৃতি)</label>
+                <input type="file" id="voice-negative-input" accept="audio/*">
+            </div>
+
+            <div class="form-group">
+                <label>Neutral Response (সাধারণ/নিরপেক্ষ কোনো প্রশ্নের উত্তর)</label>
+                <input type="file" id="voice-neutral-input" accept="audio/*">
+            </div>
+
+            <button class="btn-submit-panel" id="submit-voice-btn">Upload & Predict</button>
+            <div id="voice-result" class="result-badge hidden"></div>
+        </div>
+
+        <!-- ============= 3) HANDWRITING ASSESSMENT (ডান পাশে) ============= -->
+        <!-- ⚠️ এই পার্টটা আগে ছবি (image) নিতো, এখন থেকে একটা .txt ফাইল নেয়।
+             .txt ফাইলের ভেতরে কমা (,) দিয়ে আলাদা করা numeric feature
+             values থাকতে হবে (যেমন: 12,0.45,3,7.8,2,0.91)। এই সংখ্যাগুলোই
+             backend এ গিয়ে parse হয়ে handwriting মডেলের ইনপুট হিসেবে যাবে।
+             ফর্ম-ফিল্ডের id (handwriting-file-input) এবং button id
+             (submit-handwriting-btn) আগের মতোই রাখা হয়েছে, তাই
+             assessment.js এর কোনো কোড বদলানোর দরকার নেই - সেটা যেভাবে
+             আগে file আপলোড করতো, ঠিক সেভাবেই এখন .txt ফাইল আপলোড করবে। -->
+        <div class="assessment-panel">
+            <h4>✍️ Handwriting Assessment</h4>
+            <div class="form-group">
+                <label>Upload Handwriting Feature File (.txt)</label>
+                <input type="file" id="handwriting-file-input" accept=".txt,text/plain">
+            </div>
+            <!-- ইউজারকে বুঝিয়ে দেওয়ার জন্য একটা ছোট উদাহরণ/নির্দেশনা -->
+            <p style="font-size:12px;color:#9ca3af;margin-top:-6px;">
+                Give the numbers separated by commas inside the file, Example: <code>12,0.45,3,7.8,2,0.91</code>
+            </p>
+            <button class="btn-submit-panel" id="submit-handwriting-btn">Upload & Predict</button>
+            <div id="handwriting-result" class="result-badge hidden"></div>
+        </div>
+
+    </div>
+
+    <!-- =====================================================================
+         SAVE বাটন: ক্লিক করলে assessment.js এর মাধ্যমে
+         /api/assessments/{id}/finalize কল হবে, যেটা এই assessment টাকে
+         চিরতরে লক করে দেবে (is_finalized = 1) - এরপর আর কোনো প্যানেল
+         এডিট/resubmit করা যাবে না।
+         ===================================================================== -->
+    <button class="btn-primary" id="save-assessment-btn" style="margin-top:24px;">
+        💾 Save Assessment
+    </button>
+    <p style="font-size:12px;color:#9ca3af;margin-top:8px;">
+        ⚠️ Once you save it, you cannot edit it again. So, fill in all the panels correctly and click Submit before saving.
+    </p>
+
+    {% endif %}
+</div>
+
+{% if not assessment.is_finalized %}
+<!-- assessment.js শুধু তখনই লোড হচ্ছে যখন ফর্ম এডিটযোগ্য (finalized না) -
+     কারণ read-only ভিউতে কোনো ইনপুট/বাটন নেই যেগুলো এই JS নিয়ন্ত্রণ করে,
+     তাই অযথা এই স্ক্রিপ্ট লোড করলে element না পেয়ে console এ error দেখাত -->
+<script src="/static/js/assessment.js"></script>
+{% endif %}
+
+{% include "_footer.html" %}
+
+</body>
+</html>
