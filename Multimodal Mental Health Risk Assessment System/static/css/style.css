@@ -1,0 +1,573 @@
+/* =====================================================================
+   style.css
+   ----------
+   পুরো ওয়েবসাইটের জন্য একটাই CSS ফাইল। প্রতিটা section কমেন্ট দিয়ে
+   আলাদা করা আছে যাতে কোন অংশ কোন পেজের জন্য বুঝতে সুবিধা হয়।
+   ===================================================================== */
+
+/* --- Reset & Base --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+body {
+    background: #f4f6f9;
+    color: #1f2937;
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* =====================================================================
+   LOGIN PAGE
+   ===================================================================== */
+.login-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+}
+
+.login-card {
+    background: #fff;
+    padding: 40px;
+    border-radius: 16px;
+    width: 380px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+}
+
+.login-card .logo {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    color: #4f46e5;
+    margin-bottom: 6px;
+}
+
+.login-card .tagline {
+    text-align: center;
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 24px;
+}
+
+.form-group { margin-bottom: 16px; }
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #374151;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.form-row-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    margin-bottom: 18px;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 11px;
+    background: #4f46e5;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-primary:hover { background: #4338ca; }
+
+.btn-secondary {
+    width: 100%;
+    padding: 11px;
+    background: #fff;
+    color: #4f46e5;
+    border: 1.5px solid #4f46e5;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.error-text { color: #dc2626; font-size: 13px; margin-top: 8px; }
+.success-text { color: #16a34a; font-size: 13px; margin-top: 8px; }
+.hidden { display: none !important; }
+
+/* =====================================================================
+   NAVBAR (Dashboard, Students, Profile, Assessment - সব পেজে কমন)
+   ===================================================================== */
+.navbar {
+    background: #10058a;
+    /*background: #fff;*/
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 32px;
+}
+
+.navbar .logo { font-weight: 700; font-size: 18px; color: #ffffff; }
+
+.navbar .nav-links { display: flex; gap: 26px; align-items: center; }
+
+.navbar .nav-links a {
+    font-size: 14px;
+    font-weight: 500;
+    color: #ffffff;
+    padding: 6px 4px;
+}
+
+.navbar .nav-links a.active {
+    color: #9b9b9b;
+    border-bottom: 2px solid #9b9b9b;
+}
+
+.navbar .nav-links a.logout-link { color: #dc2626; }
+
+
+/*======================================================================*/
+/* =========================
+   Footer
+========================= */
+.footer-section:last-child {
+    margin-left: auto;
+    padding-right: 80px;
+}
+
+.site-footer {
+    margin-top: 50px;
+    background: #10058a;
+    color: #333;
+    border-top: 1px solid #ddd6f3;
+}
+
+/* Main Footer */
+.footer-container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 35px 40px 25px;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+}
+
+/* Footer Sections */
+.footer-section h3 {
+    margin: 0 0 18px;
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.footer-section p {
+    margin: 10px 0;
+    font-size: 14px;
+    color: #ffffff;
+}
+
+.footer-icon {
+    display: inline-block;
+    width: 25px;
+    margin-right: 5px;
+}
+
+.footer-section strong {
+    color: #ffffff;
+}
+
+/* Social Links */
+.social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.social-links a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    width: fit-content;
+
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 14px;
+
+    transition: 0.2s ease;
+}
+
+.social-links a span {
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #e5defc;
+    color: #5b4b9a;
+
+    border-radius: 50%;
+
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.social-links a:hover {
+    color: #5b4b9a;
+    transform: translateX(4px);
+}
+
+.social-links a:hover span {
+    background: #5b4b9a;
+    color: white;
+}
+
+
+/* Confidentiality */
+.confidentiality-section {
+    max-width: 1020px;
+    margin: 0 auto;
+
+    padding: 18px 40px;
+
+    border-top: 1px solid #ddd6f3;
+    border-bottom: 1px solid #ddd6f3;
+
+    text-align: center;
+}
+
+.confidentiality-section h4 {
+    margin: 0 0 7px;
+
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.confidentiality-section p {
+    margin: 0;
+
+    color: #ffffff;
+    font-size: 13px;
+}
+
+
+/* Copyright */
+.footer-bottom {
+    text-align: center;
+    padding: 16px 20px;
+}
+
+.footer-bottom p {
+    margin: 0;
+    color: #ffffff;
+    font-size: 13px;
+}
+
+
+/* =========================
+   Responsive Footer
+========================= */
+
+@media (max-width: 700px) {
+
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        padding: 30px 25px;
+    }
+
+    .confidentiality-section {
+        padding: 18px 25px;
+    }
+
+}
+/*======================================================================*/
+
+
+/* =====================================================================
+   PAGE CONTAINER (কমন)
+   ===================================================================== */
+.page-container { max-width: 1100px; margin: 0 auto; padding: 30px 20px; }
+
+.welcome-section { margin-bottom: 28px; }
+.welcome-section h2 { font-size: 22px; margin-bottom: 4px; }
+.welcome-section p { color: #6b7280; font-size: 14px; }
+
+/* =====================================================================
+   🆕 DASHBOARD - STATS বক্স (৪টা পাশাপাশি)
+   -----------------------------------------
+   dashboard.html এ ৪টা .stat-box আছে, সবগুলো .stats-grid এর ভেতরে।
+   এখানে সেগুলোকে card এর মতো দেখানো হচ্ছে এবং grid দিয়ে ৪টাকে
+   সমান-চওড়া কলাম আকারে পাশাপাশি বসানো হচ্ছে।
+   ===================================================================== */
+.stats-grid {
+    display: grid;
+    /* repeat(4, 1fr) মানে ৪টা কলাম, প্রতিটা সমান চওড়া - তাই ৪টা বক্স
+       ঠিক পাশাপাশি বসবে */
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 24px;
+}
+
+.stat-box {
+    background: #fff;
+    border-radius: 14px;
+    padding: 22px 18px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.stat-icon {
+    font-size: 26px;
+    margin-bottom: 8px;
+}
+
+.stat-number {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1f2937;
+    line-height: 1.2;
+}
+
+.stat-label {
+    margin-top: 4px;
+    font-size: 13px;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+/* "Students at Risk" বক্সটা আলাদা (লাল/warning) রঙে দেখানো হচ্ছে, যাতে
+   সাথে সাথে চোখে পড়ে - বাকি ৩টা বক্স normal সাদা কালারেই থাকছে */
+.stat-box-risk {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+}
+
+.stat-box-risk .stat-number {
+    color: #dc2626;
+}
+
+/* ছোট স্ক্রিনে (মোবাইল/ট্যাব) ৪টা কলাম না রেখে ২টা করে ২ সারিতে দেখানো
+   হচ্ছে, নাহলে বক্স গুলো একসাথে চেপে যেত */
+@media (max-width: 700px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* =====================================================================
+   DASHBOARD - SEARCH SECTION
+   ===================================================================== */
+.search-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 30px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.search-card h3 { margin-bottom: 16px; font-size: 17px; }
+
+.search-box-row {
+    display: flex;
+    gap: 10px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.search-box-row input {
+    flex: 1;
+    padding: 12px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.search-box-row button {
+    padding: 12px 22px;
+    background: #4f46e5;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.new-assessment-btn {
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+    padding: 14px 30px;
+    background: #16a34a;
+    color: #fff;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 15px;
+    box-shadow: 0 4px 14px rgba(22,163,74,0.3);
+}
+
+/* =====================================================================
+   STUDENTS LIST PAGE
+   ===================================================================== */
+.filters-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.filters-row select {
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 13px;
+}
+
+.student-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.student-table th, .student-table td {
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.student-table th { background: #f9fafb; color: #6b7280; font-weight: 600; }
+.student-table tr:hover { background: #f9fafb; cursor: pointer; }
+
+/* =====================================================================
+   CARDS (reusable info card - profile/student profile)
+   ===================================================================== */
+.info-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 26px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 14px;
+}
+
+.info-item .label { font-size: 12px; color: #9ca3af; text-transform: uppercase; }
+.info-item .value { font-size: 15px; font-weight: 600; margin-top: 3px; }
+
+/* =====================================================================
+   NEW ASSESSMENT PAGE
+   ===================================================================== */
+.choice-cards {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.choice-card {
+    background: #fff;
+    border: 2px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 30px;
+    width: 220px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.choice-card:hover { border-color: #4f46e5; transform: translateY(-3px); }
+.choice-card .icon { font-size: 34px; margin-bottom: 10px; }
+.choice-card h4 { font-size: 16px; }
+
+/* =====================================================================
+   ASSESSMENT PAGE - 3 COLUMN LAYOUT
+   ===================================================================== */
+.assessment-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.assessment-panel {
+    background: #fff;
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.assessment-panel h4 {
+    margin-bottom: 14px;
+    font-size: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.assessment-panel .form-group { margin-bottom: 12px; }
+.assessment-panel .form-group label { font-size: 12px; }
+.assessment-panel .form-group input,
+.assessment-panel .form-group select {
+    padding: 8px 10px;
+    font-size: 13px;
+}
+
+.btn-submit-panel {
+    width: 100%;
+    padding: 10px;
+    background: #4f46e5;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.result-badge {
+    margin-top: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    background: #eef2ff;
+    color: #4338ca;
+    font-weight: 700;
+    text-align: center;
+    font-size: 14px;
+}
+
+@media (max-width: 900px) {
+    .assessment-columns { grid-template-columns: 1fr; }
+}
